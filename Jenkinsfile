@@ -4,6 +4,10 @@ pipeline {
   environment {
     COMPOSE_FILE = "docker-compose.ci.yml"
   }
+  options {
+    ansiColor('xterm')
+    timestamps()
+  }
   stages {
     stage('Init') {
       steps {

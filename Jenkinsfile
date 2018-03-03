@@ -7,6 +7,8 @@ pipeline {
   options {
     ansiColor('xterm')
     timestamps()
+    disableConcurrentBuilds()
+    buildDiscarder(logRotator(numToKeepStr: '20'))
   }
   stages {
     stage('Init') {
@@ -52,7 +54,9 @@ pipeline {
           if [ \${IS_HEALTHY} -eq 0 ]; then
             echo "Healthcheck passed!"
           else
-            sudo docker-compose logs
+            sudo docker-compose logs redis
+            sudo docker-compose logs dnmonster
+            sudo docker-compose logs identidock
           fi
 
           # pull down the system

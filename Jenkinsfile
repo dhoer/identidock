@@ -3,6 +3,7 @@ pipeline {
   agent any
   environment {
     COMPOSE_FILE = "docker-compose.ci.yml"
+    COMPOSE_PROJECT_NAME = "jenkins"
   }
   options {
     ansiColor('xterm')
@@ -23,20 +24,24 @@ pipeline {
     stage('Build') {
       steps {
         sh 'sudo docker-compose build --no-cache'
+        sh 'sudo docker-compose up -d'
       }
     }
-    stage('Test') {
+    stage('Unit Tests') {
+      steps {
+        sh 'sudo docker-compose run --no-deps --rm -e ENV=UNIT identidock'
+      }
+    }
+    stage('System Test') {
       steps {
         sh """
-          sudo docker-compose up -d
-
           sudo docker ps
           
           # validate web status healthy
           IS_HEALTHY=1
 
           for i in `seq 1 12`; do
-            STATUS=`sudo docker inspect --format='{{index .State.Health.Status}}' identidock_identidock_1`
+            STATUS=`sudo docker inspect --format='{{index .State.Health.Status}}' jenkins_identidock_1`
             case \${STATUS} in
               healthy)
                 IS_HEALTHY=0

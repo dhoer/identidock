@@ -1,0 +1,17 @@
+version: '3'
+services:
+  identidock:
+    build: .
+    environment:
+      ENV: DEV
+    volumes:
+      - ./app:/app
+    links:
+      - dnmonster
+      - redis
+
+  dnmonster:
+    image: amouat/dnmonster:1.0
+
+  redis:
+    image: redis:3.2

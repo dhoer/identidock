@@ -3,7 +3,6 @@ pipeline {
   agent any
   environment {
     COMPOSE_FILE = "docker-compose.ci.yml"
-    COMPOSE_PROJECT_NAME = "identidock${BRANCH_NAME}"
   }
   stages {
     stage('Init') {
@@ -25,13 +24,13 @@ pipeline {
         sh """
           sudo docker-compose up -d
 
-          docker ps
+          sudo docker ps
           
           # validate web status healthy
           IS_HEALTHY=1
 
           for i in `seq 1 12`; do
-            STATUS=`sudo docker inspect --format='{{index .State.Health.Status}}' \${COMPOSE_PROJECT_NAME}_app_1`
+            STATUS=`sudo docker inspect --format='{{index .State.Health.Status}}' identidock_identidock_1`
             case \${STATUS} in
               healthy)
                 IS_HEALTHY=0

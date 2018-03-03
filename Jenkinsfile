@@ -10,25 +10,25 @@ pipeline {
       steps {
         sh """
           docker-compose -v
-          docker-compose down
+          sudo docker-compose down
         """
       }
     }
     stage('Build') {
       steps {
-        sh 'docker-compose build --no-cache'
+        sh 'sudo docker-compose build --no-cache'
       }
     }
     stage('Test') {
       steps {
         sh """
-          docker-compose up -d
+          sudo docker-compose up -d
 
           # validate web status healthy
           IS_HEALTHY=1
 
           for i in `seq 1 12`; do
-            STATUS=`docker inspect --format='{{index .State.Health.Status}}' \${COMPOSE_PROJECT_NAME}_app_1`
+            STATUS=`sudo docker inspect --format='{{index .State.Health.Status}}' \${COMPOSE_PROJECT_NAME}_app_1`
             case \${STATUS} in
               healthy)
                 IS_HEALTHY=0
@@ -46,11 +46,11 @@ pipeline {
           if [ \${IS_HEALTHY} -eq 0 ]; then
             echo "Healthcheck passed!"
           else
-            docker-compose logs
+            sudo docker-compose logs
           fi
 
           # pull down the system
-          docker-compose down
+          sudo docker-compose down
 
           exit \${IS_HEALTHY}
         """

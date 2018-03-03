@@ -9,6 +9,7 @@ pipeline {
     stage('Init') {
       steps {
         sh """
+          env | sort
           docker-compose -v
           sudo docker-compose down
         """
@@ -24,6 +25,8 @@ pipeline {
         sh """
           sudo docker-compose up -d
 
+          docker ps
+          
           # validate web status healthy
           IS_HEALTHY=1
 

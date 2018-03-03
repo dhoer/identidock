@@ -4,8 +4,6 @@ services:
     build: .
     environment:
       ENV: PROD
-    volumes:
-      - ./app:/app
     links:
       - dnmonster
       - redis

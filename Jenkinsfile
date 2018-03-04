@@ -2,6 +2,8 @@
 pipeline {
   agent any
   environment {
+//    COMPOSE_FILE = "docker-compose.ci.yml"
+//    COMPOSE_PROJECT_NAME = "jenkins"
     COMPOSE_ARGS=" -f docker-compose.ci.yml -p jenkins "
   }
   options {

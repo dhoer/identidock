@@ -1,0 +1,58 @@
+version: {branch}.{build}
+image: Visual Studio 2017
+
+environment:
+    COMPOSE_FILE: docker-compose.ci.yml
+    COMPOSE_PROJECT_NAME: identidock{branch}
+
+install:
+  - docker version
+  - choco install -y docker-compose
+  - choco install -y python
+
+before_build:
+  - docker-compose down
+
+build_script:
+  - docker-compose build --no-cache
+
+before_test:
+  - docker-compose up -d
+
+test_script:
+  # Run unit tests
+  - docker-compose run --no-deps --rm -e ENV=UNIT identidock
+  - ps: >-
+    # Run system test
+    $IsHealthy =  $False
+    for ($i=1; $i -le 12; $i++)
+    {
+      $Status = Invoke-Expression "docker inspect --format='{{index .State.Health.Status}}' $env:COMPOSE_PROJECT_NAME_identidock_1 2>&1"
+      switch ( $Status )
+      {
+        healthy
+        {
+          $IsHealthy = $true
+          break
+        }
+        unhealthy
+        {
+          break
+        }
+        default
+        {
+          Start-Sleep -s 10
+        }
+      }
+    }
+    if ($IsHealthy) {
+      Write-Host "Healthcheck passed!"
+    }
+    else
+      docker-compose logs redis
+      docker-compose logs dnmonster
+      docker-compose logs identidock
+    }
+
+after_test:
+  - docker-compose down

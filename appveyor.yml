@@ -8,7 +8,6 @@ environment:
 install:
   - docker version
   - choco install -y docker-compose
-  - choco install -y python -d
 
 before_build:
   - ps: docker-compose down

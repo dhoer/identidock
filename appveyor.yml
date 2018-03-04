@@ -27,6 +27,7 @@ test_script:
     # Run system test
     $IsHealthy =  $False
 
+
     1..10 | % {
       $Status = "unhealthy" # Invoke-Expression "docker inspect --format='{{index .State.Health.Status}}' ${env:COMPOSE_PROJECT_NAME}_identidock_1 2>&1"
       switch ( $Status )

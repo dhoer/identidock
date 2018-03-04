@@ -10,7 +10,7 @@ install:
   - choco install -y docker-compose
 
 before_build:
-  - ps: docker-compose down
+  - docker-compose down
 
 build_script:
   - docker-compose build --no-cache

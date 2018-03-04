@@ -1,5 +1,5 @@
-version: {branch}.{build}
-image: Visual Studio 2017
+version: '{build}-{branch}'
+image: Visual Studio 2017 # supports docker
 
 environment:
     COMPOSE_FILE: docker-compose.ci.yml

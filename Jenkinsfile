@@ -2,8 +2,7 @@
 pipeline {
   agent any
   environment {
-    COMPOSE_FILE = "docker-compose.ci.yml"
-    COMPOSE_PROJECT_NAME = "jenkins"
+    COMPOSE_ARGS=" -f docker-compose.ci.yml -p jenkins "
   }
   options {
     ansiColor('xterm')
@@ -18,21 +17,21 @@ pipeline {
           env | sort
           docker-compose -v
           sudo env | sort
-          sudo docker-compose down
+          sudo docker-compose $COMPOSE_ARGS down
           ls -al
         """
       }
     }
     stage('Build') {
       steps {
-        sh 'sudo docker-compose build --no-cache'
-        sh 'sudo docker-compose up -d'
+        sh 'sudo docker-compose $COMPOSE_ARGS build --no-cache'
+        sh 'sudo docker-compose $COMPOSE_ARGS up -d'
       }
     }
     stage('Unit Tests') {
       steps {
         sh 'ls -al'
-        sh 'sudo docker-compose run --no-deps --rm -e ENV=UNIT identidock'
+        sh 'sudo docker-compose $COMPOSE_ARGS run --no-deps --rm -e ENV=UNIT identidock'
       }
     }
     stage('System Test') {
@@ -62,13 +61,13 @@ pipeline {
           if [ \${IS_HEALTHY} -eq 0 ]; then
             echo "Healthcheck passed!"
           else
-            sudo docker-compose logs redis
-            sudo docker-compose logs dnmonster
-            sudo docker-compose logs identidock
+            sudo docker-compose $COMPOSE_ARGS logs redis
+            sudo docker-compose $COMPOSE_ARGS logs dnmonster
+            sudo docker-compose $COMPOSE_ARGS logs identidock
           fi
 
           # pull down the system
-          sudo docker-compose down
+          sudo docker-compose $COMPOSE_ARGS down
 
           exit \${IS_HEALTHY}
         """

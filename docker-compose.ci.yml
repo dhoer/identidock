@@ -3,7 +3,7 @@ services:
   identidock:
     build: .
     environment:
-      ENV: PRD
+      ENV: PROD
     links:
       - dnmonster
       - redis

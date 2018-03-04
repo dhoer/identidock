@@ -18,7 +18,7 @@ pipeline {
           env | sort
           docker-compose -v
           sudo docker-compose down
-          echo pwd
+          echo $pwd
         """
       }
     }
@@ -30,6 +30,7 @@ pipeline {
     }
     stage('Unit Tests') {
       steps {
+        sh 'echo $pwd'
         sh 'sudo docker-compose run --no-deps --rm -e ENV=UNIT identidock'
       }
     }

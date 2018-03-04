@@ -19,7 +19,7 @@ pipeline {
           docker-compose -v
           sudo env | sort
           sudo docker-compose down
-          echo $pwd
+          ls -al
         """
       }
     }
@@ -31,7 +31,7 @@ pipeline {
     }
     stage('Unit Tests') {
       steps {
-        sh 'pwd'
+        sh 'ls -al'
         sh 'sudo docker-compose run --no-deps --rm -e ENV=UNIT identidock'
       }
     }

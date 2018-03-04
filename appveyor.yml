@@ -25,32 +25,5 @@ test_script:
   - ps: >-
     IsHealthy = $False
 
-
-    1..10 | % {
-
-      $Status = "unhealthy" # Invoke-Expression "docker inspect --format='{{index .State.Health.Status}}' ${env:COMPOSE_PROJECT_NAME}_identidock_1 2>&1"
-      switch ( $Status ) {
-        healthy {
-          $IsHealthy = $true
-          break
-        }
-        unhealthy {
-          break
-        }
-        default
-        {
-          Start-Sleep -s 10
-        }
-      }
-    }
-    if ($IsHealthy) {
-      Write-Host "Healthcheck passed!"
-    }
-    else
-      docker-compose logs redis
-      docker-compose logs dnmonster
-      docker-compose logs identidock
-    }
-
 after_test:
   - docker-compose down

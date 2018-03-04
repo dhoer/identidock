@@ -17,33 +17,34 @@ pipeline {
         sh """
           env | sort
           docker-compose -v
-          docker-compose down
+          sudo env | sort
+          sudo docker-compose down
           echo $pwd
         """
       }
     }
     stage('Build') {
       steps {
-        sh 'docker-compose build --no-cache'
-        sh 'docker-compose up -d'
+        sh 'sudo docker-compose build --no-cache'
+        sh 'sudo docker-compose up -d'
       }
     }
     stage('Unit Tests') {
       steps {
-        sh 'echo $pwd'
-        sh 'docker-compose run --no-deps --rm -e ENV=UNIT identidock'
+        sh 'pwd'
+        sh 'sudo docker-compose run --no-deps --rm -e ENV=UNIT identidock'
       }
     }
     stage('System Test') {
       steps {
         sh """
-          docker ps
-          
+          sudo docker ps
+
           # validate web status healthy
           IS_HEALTHY=1
 
           for i in `seq 1 12`; do
-            STATUS=`docker inspect --format='{{index .State.Health.Status}}' jenkins_identidock_1`
+            STATUS=`sudo docker inspect --format='{{index .State.Health.Status}}' jenkins_identidock_1`
             case \${STATUS} in
               healthy)
                 IS_HEALTHY=0
@@ -61,13 +62,13 @@ pipeline {
           if [ \${IS_HEALTHY} -eq 0 ]; then
             echo "Healthcheck passed!"
           else
-            docker-compose logs redis
-            docker-compose logs dnmonster
-            docker-compose logs identidock
+            sudo docker-compose logs redis
+            sudo docker-compose logs dnmonster
+            sudo docker-compose logs identidock
           fi
 
           # pull down the system
-          docker-compose down
+          sudo docker-compose down
 
           exit \${IS_HEALTHY}
         """

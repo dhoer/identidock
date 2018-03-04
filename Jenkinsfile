@@ -18,7 +18,7 @@ pipeline {
           env | sort
           docker-compose -v
           sudo docker-compose down
-          pwd
+          echo pwd
         """
       }
     }

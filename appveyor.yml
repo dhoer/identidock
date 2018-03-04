@@ -29,16 +29,14 @@ test_script:
 
 
     1..10 | % {
+
       $Status = "unhealthy" # Invoke-Expression "docker inspect --format='{{index .State.Health.Status}}' ${env:COMPOSE_PROJECT_NAME}_identidock_1 2>&1"
-      switch ( $Status )
-      {
-        healthy
-        {
+      switch ( $Status ) {
+        healthy {
           $IsHealthy = $true
           break
         }
-        unhealthy
-        {
+        unhealthy {
           break
         }
         default

@@ -22,8 +22,6 @@ before_test:
 test_script:
   # Run unit tests
   - docker-compose run --no-deps --rm -e ENV=UNIT identidock
-  - ps: >-
-    IsHealthy = $False
 
 after_test:
   - docker-compose down

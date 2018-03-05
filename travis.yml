@@ -1,0 +1,22 @@
+sudo: required
+
+language: python
+
+services:
+  - docker
+
+env:
+- COMPOSE_FILE: docker-compose.ci.yml
+    COMPOSE_PROJECT_NAME: identidock{branch}
+
+before_script:
+- env | sort
+- docker -v
+- docker-compose -v
+- docker-compose ps
+
+script:
+- docker-compose $COMPOSE_ARGS build --no-cache
+
+after_script:
+- docker-compose down

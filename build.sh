@@ -3,7 +3,11 @@ set -x
 
 docker -v
 docker-compose -v
+
+# Build Image
 docker-compose build --no-cache
+
+# Spin up
 docker-compose up -d
 
 # Unit Tests

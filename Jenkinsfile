@@ -12,7 +12,25 @@ pipeline {
     buildDiscarder(logRotator(numToKeepStr: '20'))
   }
   stages {
+    stage('Pre') {
+      steps {
+        sh 'sudo -E docker-compose down'
+      }
+    }
     stage('Build') {
+      steps {
+        sh 'sudo -E ./build.sh'
+      }
+    }
+    stage('Post') {
+      steps {
+        sh 'sudo -E docker-compose down'
+      }
+    }
+    stage('Deploy') {
+      when {
+        branch 'master'
+      }
       steps {
         sh 'sudo -E ./build.sh'
       }

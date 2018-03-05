@@ -2,10 +2,10 @@
 pipeline {
   agent any
   environment {
-    RELEASE = "1.0.${BRANCH_NAME}"
+    RELEASE = "1.0.${BUILD_ID}"
     IMAGE_NAME = 'dhoer/identidock'
     COMPOSE_FILE = 'docker-compose.ci.yml'
-    COMPOSE_PROJECT_NAME = 'jenkins'
+    COMPOSE_PROJECT_NAME = 'identidock{BRANCH_NAME}'
   }
   options {
     ansiColor('xterm')

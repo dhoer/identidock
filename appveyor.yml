@@ -2,8 +2,8 @@ version: '{build}-{branch}'
 image: Visual Studio 2017 # supports docker
 
 environment:
-    COMPOSE_FILE: docker-compose.ci.yml
-    COMPOSE_PROJECT_NAME: identidock{branch}
+  COMPOSE_FILE: docker-compose.ci.yml
+  COMPOSE_PROJECT_NAME: identidock{branch}
 
 install:
   - docker version

@@ -7,7 +7,7 @@ services:
 
 env:
 - COMPOSE_FILE=docker-compose.ci.yml
-- COMPOSE_PROJECT_NAME=identidock{TRAVIS_BRANCH}
+- COMPOSE_PROJECT_NAME=identidock${TRAVIS_BRANCH}
 
 before_script:
 - env | sort

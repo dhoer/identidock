@@ -14,11 +14,7 @@ env:
     - COMPOSE_PROJECT_NAME=identidock${TRAVIS_BRANCH}
 
 script:
-  - docker -v
-  - docker-compose -v
-  - docker-compose ps
-  - env
-  - docker-compose build --no-cache
+  - ./build.sh
 
 after_script:
   - docker-compose down

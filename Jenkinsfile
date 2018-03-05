@@ -14,7 +14,7 @@ pipeline {
     buildDiscarder(logRotator(numToKeepStr: '20'))
   }
   stages {
-    stage('Pre') {
+    stage('Preflight') {
       steps {
         script {
           currentBuild.displayName = "${IMAGE_NAME}:${RELEASE}"

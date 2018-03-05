@@ -16,6 +16,9 @@ pipeline {
   stages {
     stage('Pre') {
       steps {
+        script {
+          currentBuild.displayName = "${IMAGE_NAME}:${RELEASE}"
+        }
         sh 'docker -v'
         sh 'docker-compose -v'
         sh 'env | sort'

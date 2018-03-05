@@ -13,12 +13,10 @@ env:
     - COMPOSE_FILE=docker-compose.ci.yml
     - COMPOSE_PROJECT_NAME=identidock${TRAVIS_BRANCH}
 
-before_script:
+script:
   - docker -v
   - docker-compose -v
   - docker-compose ps
-
-script:
   - env
   - docker-compose build --no-cache
 

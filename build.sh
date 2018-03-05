@@ -13,7 +13,7 @@ docker-compose run --no-deps --rm -e ENV=UNIT identidock
 IS_HEALTHY=1
 
 for i in `seq 1 12`; do
-  STATUS=`docker inspect --format='{{index .State.Health.Status}}' jenkins_identidock_1`
+  STATUS=`docker inspect --format='{{index .State.Health.Status}}' ${COMPOSE_PROJECT_NAME}_identidock_1`
   case ${STATUS} in
     healthy)
       IS_HEALTHY=0

@@ -2,8 +2,10 @@
 pipeline {
   agent any
   environment {
-    COMPOSE_FILE = "docker-compose.ci.yml"
-    COMPOSE_PROJECT_NAME = "jenkins"
+    RELEASE = "1.0.${BRANCH_NAME}"
+    IMAGE_NAME = 'dhoer/identidock'
+    COMPOSE_FILE = 'docker-compose.ci.yml'
+    COMPOSE_PROJECT_NAME = 'jenkins'
   }
   options {
     ansiColor('xterm')
@@ -14,26 +16,43 @@ pipeline {
   stages {
     stage('Pre') {
       steps {
-        sh 'sudo -E docker-compose down'
+        sh 'docker -v'
+        sh 'docker-compose -v'
+        sh 'env | sort'
       }
     }
     stage('Build') {
       steps {
         sh 'sudo -E ./build.sh'
-      }
-    }
-    stage('Post') {
-      steps {
-        sh 'sudo -E docker-compose down'
+        sh 'sudo -E docker-compose ps'
       }
     }
     stage('Deploy') {
       when {
-        branch 'master'
+        branch 'never'
       }
       steps {
-        sh 'sudo -E ./build.sh'
+        withCredentials([[$class: 'FileBinding', credentialsId: 'DOCKER_HUB', variable: 'CREDS']]) {
+          sh '''
+            mkdir -p .docker
+            cat ${CREDS} > .docker/config.json
+
+            # tag image
+            docker tag ${COMPOSE_PROJECT_NAME}_app ${IMAGE_NAME}:latest
+            docker tag ${COMPOSE_PROJECT_NAME}_app ${IMAGE_NAME}:${RELEASE}
+
+            # image push
+            docker --config=.docker/ push ${IMAGE_NAME}:${RELEASE}
+            docker --config=.docker/ push ${IMAGE_NAME}:latest
+          '''
+        }
       }
     }
   }
+  post {
+    always {
+      sh 'sudo -E docker-compose down || true'
+    }
+  }
+
 }

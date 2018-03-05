@@ -39,8 +39,8 @@ pipeline {
             cat ${CREDS} > .docker/config.json
 
             # tag image
-            docker tag ${COMPOSE_PROJECT_NAME}_app ${IMAGE_NAME}:latest
-            docker tag ${COMPOSE_PROJECT_NAME}_app ${IMAGE_NAME}:${RELEASE}
+            docker tag ${COMPOSE_PROJECT_NAME}_identidock ${IMAGE_NAME}:latest
+            docker tag ${COMPOSE_PROJECT_NAME}_identidock ${IMAGE_NAME}:${RELEASE}
 
             # image push
             docker --config=.docker/ push ${IMAGE_NAME}:${RELEASE}

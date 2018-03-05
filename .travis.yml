@@ -9,17 +9,16 @@ services:
   - docker
 
 env:
-- COMPOSE_FILE=docker-compose.ci.yml
-- COMPOSE_PROJECT_NAME=identidock${TRAVIS_BRANCH}
+  - COMPOSE_FILE=docker-compose.ci.yml
+  - COMPOSE_PROJECT_NAME=identidock${TRAVIS_BRANCH}
 
 before_script:
-- env | sort
-- docker -v
-- docker-compose -v
-- docker-compose ps
+  - docker -v
+  - docker-compose -v
+  - docker-compose ps
 
 script:
-- docker-compose build --no-cache
+  - docker-compose build --no-cache
 
 after_script:
-- docker-compose down
+  - docker-compose down

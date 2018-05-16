@@ -12,6 +12,9 @@ Changes from original:
 - Rename `jenkins.yml` to `docker-compose.ci.yml`
 - Update jenkins' docker engine from `docker-machine` to `docker-ce`
 
+# Slides
+
+https://docs.google.com/presentation/d/1dOU_9wFH8NuNWM4cIuLAdtes7s2l1T633KOvWFmANtA/edit?usp=sharing
 
 # Quick Start
 
